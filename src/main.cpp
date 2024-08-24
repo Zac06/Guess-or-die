@@ -62,7 +62,9 @@ int main(int argc, char** argv){
                                                         //and it was lost before you could go on with the other, now it is refreshed at request and all the pumped
                                                         //events are available until the next refresh
         
-
+        if(event_mgr::get_event(SDL_QUIT).status==true){        //close button handling
+            window.set_running(false);
+        }
         
         window.display();                               //displays everything that has been put in the renderer
     }
