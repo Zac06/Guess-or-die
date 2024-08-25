@@ -62,7 +62,6 @@ int main(int argc, char** argv){
 
     while(window.is_running()){                         //while the window is still running
         window.clear();                                 //refreshes the screen. Might take a color as parameter (background color)
-        //window.clear((SDL_Color){255,0,0,0});
         
         event_mgr::update();                            //refreshes the events. While with a continuous polling of events you could manage one event at a time, 
                                                         //and it was lost before you could go on with the other, now it is refreshed at request and all the pumped
