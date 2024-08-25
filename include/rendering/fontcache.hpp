@@ -23,7 +23,7 @@ class fontcache{
         /// @param p_font_size Size of the font to render (es. Arial, 10pt)
         /// @param p_color Color of the font to render.
         /// @param p_rend Renderer. Usually took from render_window::get_renderer();
-        fontcache(TTF_Font* p_f, int p_font_size, SDL_Color p_color, SDL_Renderer* p_rend);
+        fontcache(TTF_Font* p_f, SDL_Color p_color, SDL_Renderer* p_rend);
         ~fontcache();
 
         /// @brief returns the texture of a single character. Used when rendering.

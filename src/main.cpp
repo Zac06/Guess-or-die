@@ -12,6 +12,8 @@
 #include "base_elements/gui_element.hpp"
 #include "gui_elements/gui_button.hpp"
 
+#include "game_elements/game.hpp"
+
 using namespace std;
 
 /// @brief initializes all necessary elements. Prints errors if something fails.
@@ -50,7 +52,11 @@ int main(int argc, char** argv){
         return -1;
     }
 
-    render_window window("SDL_base", 640, 480);                         //initializes the window and the renderer
+    render_window window("SDL_base", 900, 675);                         //initializes the window and the renderer
+    TTF_Font* main_font=window.load_font("../res/font/CustomKarmaticArcade.ttf", 40);
+    
+    
+    guess_or_die game(window, main_font);
 
     event_mgr::init();                                  //initialize event_mgr attributes
 
@@ -61,11 +67,12 @@ int main(int argc, char** argv){
         event_mgr::update();                            //refreshes the events. While with a continuous polling of events you could manage one event at a time, 
                                                         //and it was lost before you could go on with the other, now it is refreshed at request and all the pumped
                                                         //events are available until the next refresh
-        
         if(event_mgr::get_event(SDL_QUIT).status==true){        //close button handling
             window.set_running(false);
         }
-        
+
+        game.render();
+
         window.display();                               //displays everything that has been put in the renderer
     }
 

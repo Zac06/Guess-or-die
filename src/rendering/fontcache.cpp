@@ -1,10 +1,12 @@
 #include "rendering/fontcache.hpp"
 
-fontcache::fontcache(TTF_Font* p_f, int p_font_size, SDL_Color p_color, SDL_Renderer* p_rend)
-    :char_textures(256, NULL), font_size(p_font_size), font(p_f), color(p_color)
+fontcache::fontcache(TTF_Font* p_f, SDL_Color p_color, SDL_Renderer* p_rend)
+    :char_textures(256, NULL), font(p_f), color(p_color)
 {
     SDL_Surface* tmp_surface;   //temporary surface to render the text on
     char tmp_str[2]={0,0};
+
+    font_size=TTF_FontHeight(p_f);
 
     for(int i=0; i<(int)char_textures.size(); i++){
         tmp_str[0]=(char)i;     //char to render

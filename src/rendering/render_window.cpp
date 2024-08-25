@@ -234,8 +234,15 @@ void render_window::display(){
     SDL_RenderPresent(renderer);                        //shows the things in the buffer in the display
 }
 
-void render_window::render_entity(entity& p_ent){       //render the texture of the entity
-    render_texture_ultra2(p_ent.get_tex(), p_ent.get_x(), p_ent.get_y(), p_ent.get_w(), p_ent.get_h(), p_ent.get_scale(), p_ent.get_rotation(), p_ent.get_rot_center());
+void render_window::render_entity(entity& p_ent, bool p_invert_y){       //render the texture of the entity
+    if(p_invert_y){
+        int tmp_y=get_win_height()-p_ent.get_y();
+        //cerr<<p_ent.get_tex()<<"\n";
+        render_texture_ultra2(p_ent.get_tex(), p_ent.get_x(), tmp_y, p_ent.get_w(), p_ent.get_h(), p_ent.get_scale(), p_ent.get_rotation(), p_ent.get_rot_center());
+    }else{
+        render_texture_ultra2(p_ent.get_tex(), p_ent.get_x(), p_ent.get_y(), p_ent.get_w(), p_ent.get_h(), p_ent.get_scale(), p_ent.get_rotation(), p_ent.get_rot_center());
+    }
+    
 }
 
 void render_window::render_gui_element(gui_element& p_gui_el){
@@ -262,18 +269,45 @@ void render_window::render_text_ex(TTF_Font* font, string text, SDL_Color color,
     SDL_DestroyTexture(tmp_tex);
 }
 
-void render_window::render_text_fc(fontcache& p_fc, string text, int destx, int desty){
-    int i=0, tempx=destx, tempy=desty;
-    while(text[i]!='\0'){
-        if(text[i]=='\n'){
-            tempx=destx;
-            tempy+=get_texture_height(p_fc.get_char_texture('A'))*1.045;        //go to newline
-        }else{
-            render_texture(p_fc.get_char_texture(text[i]), tempx, tempy);       //keep rendering on the same line
-            tempx+=get_texture_width(p_fc.get_char_texture(text[i]));
+void render_window::render_text_fc(fontcache& p_fc, string text, int destx, int desty, bool center){
+    if(!center){
+        int i=0, tempx=destx, tempy=desty;
+        while(text[i]!='\0'){
+            if(text[i]=='\n'){
+                tempx=destx;
+                tempy+=get_texture_height(p_fc.get_char_texture('A'))*1.045;        //go to newline
+            }else{
+                render_texture(p_fc.get_char_texture(text[i]), tempx, tempy);       //keep rendering on the same line
+                tempx+=get_texture_width(p_fc.get_char_texture(text[i]));
+            }
+            i++;
         }
-        i++;
+    }else{
+        stringstream ss(text);
+        string tmp_text="";
+        getline(ss, tmp_text);
+
+        int i=0, tempx=destx-(get_text_width(tmp_text, p_fc)/2), tempy=desty;
+        while(!ss.eof()){
+            while(i<tmp_text.size()){
+                render_texture(p_fc.get_char_texture(tmp_text[i]), tempx, tempy);
+                tempx+=get_texture_width(p_fc.get_char_texture(tmp_text[i]));
+                i++;
+            }
+
+            getline(ss, tmp_text);
+            tempx=destx-(get_text_width(tmp_text, p_fc)/2);
+            tempy+=get_texture_height(p_fc.get_char_texture('A'))*1.045;
+            i=0;
+        }
+
+        while(i<tmp_text.size()){
+            render_texture(p_fc.get_char_texture(tmp_text[i]), tempx, tempy);       //check the last string
+            tempx+=get_texture_width(p_fc.get_char_texture(tmp_text[i]));
+            i++;
+        }
     }
+    
 }
 
 void render_window::render_text_fc_ex(fontcache& p_fc, string text, int destx, int desty, float scale){
@@ -300,4 +334,24 @@ void render_window::play_sound_ex(Mix_Chunk* p_sound, int p_times){
 
 void render_window::play_sound_pro(int p_channel, Mix_Chunk* p_sound, int p_times){
     Mix_PlayChannel(p_channel, p_sound, p_times);
+}
+
+int render_window::get_text_width(string& p_str, fontcache& p_fc){
+    int acc=0;
+    for(int i=0; i<p_str.size(); i++){
+        acc+=get_texture_width(p_fc.get_char_texture(p_str[i]));
+    }
+    return acc;
+}
+
+int render_window::get_win_width(){
+    int tmp;
+    SDL_GetWindowSize(window, &tmp, NULL);
+    return tmp;
+}
+
+int render_window::get_win_height(){
+    int tmp;
+    SDL_GetWindowSize(window, NULL, &tmp);
+    return tmp;
 }

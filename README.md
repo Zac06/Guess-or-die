@@ -4,4 +4,4 @@ This game, build around my own SDL2 abstraction layer (SDL_base), is a guessing 
 
 ---
 
-WARNING: save your work before launching the game. Have fun!
+WARNING: save your work and most importantly **FULLY BACK UP YOUR SYSTEM** before launching the game. Penalties are software level destructive. Have fun!
