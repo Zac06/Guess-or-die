@@ -27,12 +27,14 @@ class level {
         fontcache& answ_fc;
 
         gui_textbutton answer1;
-        /*gui_textbutton answer2;
+        gui_textbutton answer2;
         gui_textbutton answer3;
-        gui_textbutton answer4;*/
+        gui_textbutton answer4;
 
+        int correct_answer;
+        int right_selected;
     public:
-        level(render_window& p_win, fontcache& p_quest_fc, fontcache& p_answ_fc);
+        level(render_window& p_win, fontcache& p_quest_fc, fontcache& p_answ_fc, int p_correct_answer);
 
-        bool update_render();
+        int update_render();
 };

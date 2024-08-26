@@ -60,7 +60,7 @@ int main(int argc, char** argv){
     event_mgr::init();                                  //initialize event_mgr attributes
 
     while(window.is_running()){                         //while the window is still running
-        window.clear({0,0,0,255});                      //refreshes the screen. Might take a color as parameter (background color)
+        window.clear({200,0,0,255});                      //refreshes the screen. Might take a color as parameter (background color)
         
         event_mgr::update();                            //refreshes the events. While with a continuous polling of events you could manage one event at a time, 
                                                         //and it was lost before you could go on with the other, now it is refreshed at request and all the pumped
