@@ -37,6 +37,6 @@ class gui_button : public gui_element{
         void update() override;
 
     private:
-
+        bool ismousedown;
 
 };

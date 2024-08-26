@@ -20,7 +20,7 @@ guess_or_die::guess_or_die(render_window& p_game_win, TTF_Font* p_main_font)
         ts(p_game_win), es(p_game_win), 
         current_phase(0), 
         fc_ts_1(p_main_font, (SDL_Color){0,0,0,255}, game_win.get_renderer()), 
-        level1(game_win)
+        level1(game_win, fc_ts_1, fc_ts_1)
 {
     SDL_Texture* bg1_ts=game_win.load_texture("../res/gfx/bg1.png");
 
@@ -38,7 +38,7 @@ void guess_or_die::render(){
             
             break;
         }
-        case PHASE_LEVEL_1:{
+        case PHASE_LEVELS:{
             bool ret=level1.update_render();
             if(ret){
                 //es.reset();

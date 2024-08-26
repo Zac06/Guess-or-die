@@ -185,6 +185,8 @@ class render_window{
         int get_win_width();
 
         int get_win_height();
+
+        void append_loaded_tex(SDL_Texture* p_tex);
     private:
         SDL_Window* window;
         SDL_Renderer* renderer;

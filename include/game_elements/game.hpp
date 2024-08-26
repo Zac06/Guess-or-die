@@ -19,7 +19,7 @@
 
 enum {
     PHASE_TITLE_SCREEN=0,
-    PHASE_LEVEL_1,
+    PHASE_LEVELS,
     END_SCREEN
 };
 
@@ -36,9 +36,12 @@ class guess_or_die {
         title_screen ts;
         title_screen es;
 
-        level level1;
-
         int current_phase;
 
         fontcache fc_ts_1;
+        level level1;
+
+        
+
+        
 };

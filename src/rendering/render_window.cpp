@@ -10,7 +10,7 @@ render_window::render_window(string p_title, int p_w, int p_h)
         return;
     }
 
-    renderer=SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);      //create a renderer for the window, using GPU and VSYNC (framerate is capped)
+    renderer=SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC | SDL_RENDERER_TARGETTEXTURE);      //create a renderer for the window, using GPU and VSYNC (framerate is capped)
     if(renderer==NULL){
         cerr<<"Renderer creation failed. Error: "<<SDL_GetError()<<"\n";
         return;
@@ -72,6 +72,7 @@ SDL_Texture* render_window::load_texture(string p_filepath){
     }else{
         loaded_textures.push_back(tex);                         //adds it to the vector of loaded textures
     }
+
     return tex;
 }
 
@@ -354,4 +355,8 @@ int render_window::get_win_height(){
     int tmp;
     SDL_GetWindowSize(window, NULL, &tmp);
     return tmp;
+}
+
+void render_window::append_loaded_tex(SDL_Texture* p_tex){
+    loaded_textures.push_back(p_tex);
 }
