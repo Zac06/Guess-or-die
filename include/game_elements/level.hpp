@@ -7,6 +7,7 @@
 
 #include<iostream>
 #include<vector>
+#include<string>
 
 #include "rendering/render_window.hpp"
 #include "base_elements/entity.hpp"
@@ -20,6 +21,7 @@ class level {
     private:
         SDL_Texture* tex_1;
         SDL_Texture* tex_2;
+        SDL_Texture* bg;
 
         render_window& win;
 
@@ -31,10 +33,27 @@ class level {
         gui_textbutton answer3;
         gui_textbutton answer4;
 
+        std::string answ1_txt;
+        std::string answ2_txt;
+        std::string answ3_txt;
+        std::string answ4_txt;
+        std::string quest_txt;
+
         int correct_answer;
         int right_selected;
     public:
-        level(render_window& p_win, fontcache& p_quest_fc, fontcache& p_answ_fc, int p_correct_answer);
+        level(  render_window& p_win, 
+                fontcache& p_quest_fc, 
+                fontcache& p_answ_fc, 
+                int p_correct_answer,
+                std::string p_answ1_txt,
+                std::string p_answ2_txt,
+                std::string p_answ3_txt,
+                std::string p_answ4_txt,
+                std::string p_quest_txt,
+                SDL_Texture* p_tex_norm,
+                SDL_Texture* p_tex_act,
+                SDL_Texture* p_bg);
 
         int update_render();
 };

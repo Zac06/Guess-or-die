@@ -54,13 +54,14 @@ int main(int argc, char** argv){
 
     render_window window("SDL_base", 900, 675);                         //initializes the window and the renderer
     TTF_Font* main_font=window.load_font("../res/font/CustomKarmaticArcade.ttf", 40);
+    TTF_Font* second_font=window.load_font("../res/font/CustomKarmaticArcade.ttf", 20);
     
-    guess_or_die game(window, main_font);
+    guess_or_die game(window, main_font, second_font);
 
     event_mgr::init();                                  //initialize event_mgr attributes
 
     while(window.is_running()){                         //while the window is still running
-        window.clear({200,0,0,255});                      //refreshes the screen. Might take a color as parameter (background color)
+        window.clear();                                 //refreshes the screen. Might take a color as parameter (background color)
         
         event_mgr::update();                            //refreshes the events. While with a continuous polling of events you could manage one event at a time, 
                                                         //and it was lost before you could go on with the other, now it is refreshed at request and all the pumped

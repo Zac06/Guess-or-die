@@ -9,12 +9,18 @@
 #include<string>
 #include<queue>
 #include<sstream>
+#include<vector>
 
 #include "base_elements/entity.hpp"
 #include "rendering/fontcache.hpp"
 #include "base_elements/gui_element.hpp"
 
 using namespace std;
+
+enum {
+    TXT_CENTER_HORIZ=0b1,
+    TXT_CENTER_VERT=0b10
+};
 
 class render_window{
     public:
@@ -143,7 +149,7 @@ class render_window{
         /// @param text Text to render.
         /// @param destx X position of the text to render
         /// @param desty Y position of the text to render
-        void render_text_fc(fontcache& p_fc, string text, int destx, int desty, bool center=false);
+        void render_text_fc(fontcache& p_fc, string text, int destx, int desty, int center=0);
 
         /// @brief Renders some text to the screen using the fontcache.
         /// @param p_fc fontcache to use to render the characters.

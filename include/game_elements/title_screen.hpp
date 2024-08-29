@@ -34,9 +34,10 @@ class ts_slide {
         float delta_offset;
         float limit;
         int last_millis;
+        int center;
 
-        ts_slide(SDL_Texture* p_bg, SDL_Texture* p_splash, int p_splash_x, int p_splash_y, std::string p_text, int p_text_x, int p_text_y, fontcache* p_text_fc)
-            :bg(p_bg), splash(p_splash), splash_x(p_splash_x), splash_y(p_splash_y), text(p_text), text_x(p_text_x), text_y(p_text_y), text_fc(p_text_fc)
+        ts_slide(SDL_Texture* p_bg, SDL_Texture* p_splash, int p_splash_x, int p_splash_y, std::string p_text, int p_text_x, int p_text_y, fontcache* p_text_fc, int p_center=TXT_CENTER_HORIZ|TXT_CENTER_VERT)
+            :bg(p_bg), splash(p_splash), splash_x(p_splash_x), splash_y(p_splash_y), text(p_text), text_x(p_text_x), text_y(p_text_y), text_fc(p_text_fc), center(p_center)
         {
             splash_offset_y=0;
             delta_offset=0.01;
@@ -68,6 +69,8 @@ class title_screen {
         //Returns true if slides have ended.
         bool update_render();
         void reset();
+
+        bool firstview;
 
     private:
         std::vector<ts_slide> slides;

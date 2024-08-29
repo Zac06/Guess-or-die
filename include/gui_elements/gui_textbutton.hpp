@@ -18,13 +18,13 @@ class gui_textbutton : public gui_button {
         render_window& win;
         fontcache& fc;
 
-        static SDL_Texture* build_text_texture(SDL_Texture* p_base, render_window& p_win, fontcache& p_fc, std::string p_txt, int p_txt_x, int p_txt_y, bool center=true);
+        static SDL_Texture* build_text_texture(SDL_Texture* p_base, render_window& p_win, fontcache& p_fc, std::string p_txt, int p_txt_x, int p_txt_y, int center=TXT_CENTER_HORIZ|TXT_CENTER_VERT);
 
     public:
-        gui_textbutton(SDL_Texture* p_tex_normal, SDL_Point p_coords, render_window& p_win, fontcache& p_fc, std::string p_txt, int p_txt_x, int p_txt_y, bool center=true);
+        gui_textbutton(SDL_Texture* p_tex_normal, SDL_Point p_coords, render_window& p_win, fontcache& p_fc, std::string p_txt, int p_txt_x, int p_txt_y, int center=TXT_CENTER_HORIZ|TXT_CENTER_VERT);
 
-        gui_textbutton(SDL_Texture* p_tex_normal, SDL_Texture* p_tex_active, SDL_Point p_coords, render_window& p_win, fontcache& p_fc, std::string p_txt, int p_txt_x, int p_txt_y, bool center=true);
+        gui_textbutton(SDL_Texture* p_tex_normal, SDL_Texture* p_tex_active, SDL_Point p_coords, render_window& p_win, fontcache& p_fc, std::string p_txt, int p_txt_x, int p_txt_y, int center=TXT_CENTER_HORIZ|TXT_CENTER_VERT);
 
-        gui_textbutton(SDL_Texture* p_tex_normal, SDL_Texture* p_tex_hover, SDL_Texture* p_tex_active, SDL_Texture* p_tex_disabled, SDL_Point p_coords, render_window& p_win, fontcache& p_fc, std::string p_txt, int p_txt_x, int p_txt_y, bool center=true);
+        gui_textbutton(SDL_Texture* p_tex_normal, SDL_Texture* p_tex_hover, SDL_Texture* p_tex_active, SDL_Texture* p_tex_disabled, SDL_Point p_coords, render_window& p_win, fontcache& p_fc, std::string p_txt, int p_txt_x, int p_txt_y, int center=TXT_CENTER_HORIZ|TXT_CENTER_VERT);
 
 };

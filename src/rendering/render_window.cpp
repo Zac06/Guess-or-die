@@ -270,8 +270,9 @@ void render_window::render_text_ex(TTF_Font* font, string text, SDL_Color color,
     SDL_DestroyTexture(tmp_tex);
 }
 
-void render_window::render_text_fc(fontcache& p_fc, string text, int destx, int desty, bool center){
-    if(!center){
+void render_window::render_text_fc(fontcache& p_fc, string text, int destx, int desty, int center){
+    //cerr<<center<<"\n";
+    if(center==0){
         int i=0, tempx=destx, tempy=desty;
         while(text[i]!='\0'){
             if(text[i]=='\n'){
@@ -283,7 +284,8 @@ void render_window::render_text_fc(fontcache& p_fc, string text, int destx, int 
             }
             i++;
         }
-    }else{
+
+    }else if(center==TXT_CENTER_HORIZ){
         stringstream ss(text);
         string tmp_text="";
         getline(ss, tmp_text);
@@ -306,6 +308,52 @@ void render_window::render_text_fc(fontcache& p_fc, string text, int destx, int 
             render_texture(p_fc.get_char_texture(tmp_text[i]), tempx, tempy);       //check the last string
             tempx+=get_texture_width(p_fc.get_char_texture(tmp_text[i]));
             i++;
+        }
+
+    }else if(center==TXT_CENTER_VERT){
+        std::vector<std::string> lines;
+        stringstream ss(text);
+        string tmp_text="";
+        
+        getline(ss, tmp_text);
+        while(!ss.eof()){
+            lines.push_back(tmp_text);
+            getline(ss, tmp_text);
+        }
+        if(tmp_text!=""){
+            lines.push_back(tmp_text);
+        }
+
+        int char_h=get_texture_height(p_fc.get_char_texture('A'))*1.045;
+        char_h-=get_texture_height(p_fc.get_char_texture('A'))*0.045;
+        int tempx=destx, txt_height=char_h*lines.size(), tempy=desty-txt_height/2;
+        
+        for(int i=0; i<lines.size(); i++){
+            render_text_fc(p_fc, lines[i], tempx, tempy);
+            tempy+=char_h;
+        }
+
+    }else{      //center==TXT_CENTER_VERT|TXT_CENTER_HORIZ
+        std::vector<std::string> lines;
+        stringstream ss(text);
+        string tmp_text="";
+        
+        getline(ss, tmp_text);
+        while(!ss.eof()){
+            lines.push_back(tmp_text);
+            getline(ss, tmp_text);
+        }
+        if(tmp_text!=""){
+            lines.push_back(tmp_text);
+        }
+
+        int char_h=get_texture_height(p_fc.get_char_texture('A'))*1.045;
+        char_h-=get_texture_height(p_fc.get_char_texture('A'))*0.045;
+        int tempx=destx, txt_height=char_h*lines.size(), tempy=desty-txt_height/2;
+
+        for(int i=0; i<lines.size(); i++){
+            render_text_fc(p_fc, lines[i], tempx, tempy, TXT_CENTER_HORIZ);
+            tempy+=char_h;
         }
     }
     
