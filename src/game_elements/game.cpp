@@ -36,12 +36,16 @@ guess_or_die::guess_or_die(render_window& p_game_win, TTF_Font* p_main_font, TTF
         penalty_7_ts(p_game_win), penalty_8_ts(p_game_win)
         
 {
+    srand(time(NULL));
+
     bg_neutral=game_win.load_texture("../res/gfx/bg1.png");
     bg_good=game_win.load_texture("../res/gfx/bg2.png");
     bg_error=game_win.load_texture("../res/gfx/bg3.png");
 
     button_normal=game_win.load_texture("../res/gfx/button_normal.png");
     button_active=game_win.load_texture("../res/gfx/button_active.png");
+
+    title_splash=game_win.load_texture("../res/gfx/splash.png");
 
     level1=load_level("../res/levels/level1");
     level2=load_level("../res/levels/level2");
@@ -52,6 +56,7 @@ guess_or_die::guess_or_die(render_window& p_game_win, TTF_Font* p_main_font, TTF
     level7=load_level("../res/levels/level7");
     level8=load_level("../res/levels/level8");
 
+    ts.add_slide(ts_slide(bg_neutral, title_splash, game_win.get_win_width()/2-game_win.get_texture_width(title_splash)/2, game_win.get_win_height()/2-game_win.get_texture_height(title_splash)/2,"", 0,0, NULL));
     ts.add_slide(ts_slide(bg_neutral, NULL, 0,0,"Welcome to the\nGuess or die game!\n\nYou will need to\npay attention, however,\nas errors will be\ncostly... Good luck!", game_win.get_win_width()/2, game_win.get_win_height()/2, &fc_ts_1));
 
     congrats_1_ts.add_slide(ts_slide(bg_good, NULL, 0,0,"Excellent!", game_win.get_win_width()/2, game_win.get_win_height()/2, &fc_ts_1));
@@ -384,8 +389,6 @@ level* guess_or_die::load_level(std::string p_file_name){
     if(!fin.good()){
         return NULL;
     }
-
-    srand(time(NULL));
 
     std::vector<std::string> questions;
     std::vector<std::string> answs_1;

@@ -71,6 +71,7 @@ class guess_or_die {
         SDL_Texture* bg_neutral;
         SDL_Texture* bg_error;
         SDL_Texture* bg_good;
+        SDL_Texture* title_splash;
 
         title_screen ts;
         title_screen es;
