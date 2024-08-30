@@ -2,3 +2,4 @@
 .vscode/*
 bin/*
 launch.vbs
+release_win.zip
