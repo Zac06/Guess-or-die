@@ -1,5 +1,4 @@
 *.code-workspace
 .vscode/*
 bin/*
-launch.bat
 launch.vbs
