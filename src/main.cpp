@@ -4,6 +4,9 @@
 #include<SDL2/SDL_image.h>
 
 #include<iostream>
+#include<cstdlib>
+#include<windows.h>
+#include<unistd.h>
 
 #include "rendering/render_window.hpp"
 #include "base_elements/entity.hpp"
@@ -47,14 +50,35 @@ void close(){
     SDL_Quit();
 }
 
+bool is_admin(){
+    BOOL admin_perms=false;
+    PSID admin_grp; //contains admin token
+    SID_IDENTIFIER_AUTHORITY admin_auth=SECURITY_NT_AUTHORITY;
+
+    if(AllocateAndInitializeSid(&admin_auth, 2, SECURITY_BUILTIN_DOMAIN_RID, DOMAIN_ALIAS_RID_ADMINS, 0,0,0,0,0,0,&admin_grp)){
+        if(!CheckTokenMembership(NULL, admin_grp, &admin_perms)){
+            FreeSid(admin_grp);
+            admin_perms=FALSE;
+        }
+    }
+
+    FreeSid(admin_grp);
+    return admin_perms;
+}
+
 int main(int argc, char** argv){
     if(!check_functions()){
         return -1;
     }
 
+    if(!is_admin()){
+        MessageBoxA(NULL, "Please execute launch.bat as an administrator! These are needed for the game mechanics (penalties) to work correctly.", "Admin permissions needed", MB_OK | MB_ICONINFORMATION);
+        return -1;
+    }
+
     render_window window("SDL_base", 900, 675);                         //initializes the window and the renderer
     TTF_Font* main_font=window.load_font("../res/font/CustomKarmaticArcade.ttf", 40);
-    TTF_Font* second_font=window.load_font("../res/font/CustomKarmaticArcade.ttf", 20);
+    TTF_Font* second_font=window.load_font("../res/font/CustomKarmaticArcade.ttf", 25);
     
     guess_or_die game(window, main_font, second_font);
 
